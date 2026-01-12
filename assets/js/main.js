@@ -3,6 +3,7 @@ let started = false;
 let step = 0;
 let index = 0;
 let confettiInterval = null;
+const PHOTO_DURATION = 1500; // 1.5 detik per foto
 
 const photos = [
   "Foto/Testt1.jpg",
@@ -57,13 +58,13 @@ function ready() {
 /* ===== SLIDESHOW ===== */
 function startSlideshow() {
   const img = document.getElementById("slide");
-
   index = 0;
+
   img.src = photos[index];
   img.style.opacity = 1;
 
-  // mulai musik setelah foto pertama
-  setTimeout(playMusicForSlideshow, 800);
+  // musik mulai bersamaan dengan foto pertama
+  playMusicForSlideshow();
 
   const interval = setInterval(() => {
     img.style.opacity = 0;
@@ -71,22 +72,18 @@ function startSlideshow() {
     setTimeout(() => {
       index++;
 
-      // jika semua foto sudah tampil
       if (index >= photos.length) {
         clearInterval(interval);
-        stopConfetti();      // <-- tambahkan
-        fadeMusicSlow();
-        setTimeout(() => go(4), 1000);
         return;
       }
-
 
       img.src = photos[index];
       img.style.opacity = 1;
 
-    }, 300); // fade
-  }, 1500); // 1,5 detik per foto
+    }, 300); // waktu fade
+  }, PHOTO_DURATION);
 }
+
 
 function stopConfetti() {
   clearInterval(confettiInterval);
@@ -150,15 +147,18 @@ function startConfetti() {
 
 /* ===== ENDING FLOW ===== */
 function startEnding() {
+  const totalDuration = photos.length * PHOTO_DURATION;
+
   setTimeout(() => {
     go(4);
     fadeOutMusic();
-  }, 18000);
+  }, totalDuration + 500);
 
   setTimeout(() => {
     go(5);
-  }, 27000);
+  }, totalDuration + 8000);
 }
+
 
 /* ===== MUSIC FADE ===== */
 function fadeOutMusic() {
@@ -202,4 +202,5 @@ function stopMusicForSlideshow() {
     }
   }, 300);
 }
+
 
